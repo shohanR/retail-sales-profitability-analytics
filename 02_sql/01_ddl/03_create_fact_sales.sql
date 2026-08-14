@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS analytics.fact_sales (
 
     invoice_date DATE NOT NULL,
 
+    invoice_timestamp TIMESTAMP,
+
     customer_id INTEGER,
 
     country_key INTEGER NOT NULL,
