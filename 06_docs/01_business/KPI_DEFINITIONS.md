@@ -1,0 +1,694 @@
+# KPI Definitions
+
+## Retail Sales Profitability Analysis - Key Performance Indicators
+
+### Document Information
+- **Version**: 1.0
+- **Date**: 2024
+- **Status**: Active
+- **Owner**: Business Intelligence Team
+
+---
+
+## Financial KPIs
+
+### Total Sales
+**Definition**: Sum of all sales amounts from completed transactions
+
+**Formula**: 
+```
+Total Sales = SUM(Sales Amount)
+```
+
+**Purpose**: Measure overall revenue generation
+
+**Target**: Increase year-over-year
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Total Profit
+**Definition**: Sum of all profit amounts (Sales - Cost)
+
+**Formula**:
+```
+Total Profit = SUM(Sales Amount - Cost Amount)
+Total Profit = SUM(Profit Amount)
+```
+
+**Purpose**: Measure overall profitability
+
+**Target**: Increase year-over-year
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Profit Margin %
+**Definition**: Profit as a percentage of sales
+
+**Formula**:
+```
+Profit Margin % = (Total Profit / Total Sales) × 100
+Profit Margin % = (SUM(Profit Amount) / SUM(Sales Amount)) × 100
+```
+
+**Purpose**: Measure profitability efficiency
+
+**Target**: > 20% (adjustable by business)
+
+**Benchmark**: Industry average 15-25%
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+**Interpretation**:
+- > 30%: Excellent profitability
+- 20-30%: Good profitability
+- 10-20%: Moderate profitability
+- < 10%: Needs attention
+
+---
+
+### Gross Profit
+**Definition**: Total Sales minus Cost of Goods Sold (COGS)
+
+**Formula**:
+```
+Gross Profit = Total Sales - Total COGS
+Gross Profit = SUM(Sales Amount) - SUM(Cost Amount)
+```
+
+**Purpose**: Measure profit after direct costs
+
+**Data Source**: fact_sales table
+
+---
+
+### Cost as % of Sales
+**Definition**: Cost amount as percentage of sales
+
+**Formula**:
+```
+Cost % = (Total Cost / Total Sales) × 100
+Cost % = (SUM(Cost Amount) / SUM(Sales Amount)) × 100
+```
+
+**Purpose**: Monitor cost efficiency
+
+**Target**: < 80% (varies by product)
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Revenue Growth %
+**Definition**: Percentage change in sales from period to period
+
+**Formula**:
+```
+Growth % = ((Current Period Sales - Prior Period Sales) / Prior Period Sales) × 100
+```
+
+**Purpose**: Track sales growth trajectory
+
+**Target**: Year-over-year growth > 5-10%
+
+**Frequency**: Monthly/Quarterly/Annually
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+## Sales KPIs
+
+### Total Transactions
+**Definition**: Count of completed sales transactions
+
+**Formula**:
+```
+Total Transactions = COUNT(DISTINCT transaction_id)
+```
+
+**Purpose**: Measure transaction volume
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Average Order Value (AOV)
+**Definition**: Average sales amount per transaction
+
+**Formula**:
+```
+AOV = Total Sales / Total Transactions
+AOV = SUM(Sales Amount) / COUNT(DISTINCT transaction_id)
+```
+
+**Purpose**: Measure typical purchase size
+
+**Target**: Increase AOV through upselling/cross-selling
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Total Units Sold
+**Definition**: Sum of quantity of units sold
+
+**Formula**:
+```
+Total Units Sold = SUM(Quantity)
+```
+
+**Purpose**: Measure sales volume in units
+
+**Frequency**: Daily/Weekly/Monthly
+
+**Data Source**: fact_sales table
+
+---
+
+### Sales per Customer
+**Definition**: Average sales per unique customer
+
+**Formula**:
+```
+Sales per Customer = Total Sales / COUNT(DISTINCT customer_id)
+```
+
+**Purpose**: Measure customer profitability
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+### New Customer Revenue
+**Definition**: Sales from customers making their first purchase
+
+**Formula**:
+```
+New Customer Revenue = SUM(Sales Amount) WHERE customer_first_purchase_date = current_period
+```
+
+**Purpose**: Measure new customer acquisition effectiveness
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+### Repeat Customer Revenue
+**Definition**: Sales from existing customers (repeat purchases)
+
+**Formula**:
+```
+Repeat Revenue = Total Sales - New Customer Revenue
+```
+
+**Purpose**: Measure customer loyalty and retention
+
+**Target**: Increase repeat customer revenue
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+## Customer KPIs
+
+### Total Customers
+**Definition**: Count of unique customers
+
+**Formula**:
+```
+Total Customers = COUNT(DISTINCT customer_id)
+```
+
+**Purpose**: Measure customer base size
+
+**Frequency**: Monthly
+
+**Data Source**: dim_customer, fact_sales
+
+---
+
+### Active Customers
+**Definition**: Customers with purchases in current period
+
+**Formula**:
+```
+Active Customers = COUNT(DISTINCT customer_id) WHERE purchase_date >= current_period_start
+```
+
+**Purpose**: Measure engaged customer base
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales
+
+---
+
+### Customer Lifetime Value (CLV)
+**Definition**: Total profit generated by a customer over their lifetime
+
+**Formula**:
+```
+CLV = SUM(Profit Amount) / COUNT(DISTINCT customer_id)
+CLV = Total Profit / Total Customers
+```
+
+**Purpose**: Measure long-term customer profitability
+
+**Target**: Increase CLV through retention and upselling
+
+**Frequency**: Quarterly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+### Customer Acquisition Cost (CAC)
+**Definition**: Cost to acquire a new customer
+
+**Formula**:
+```
+CAC = Sales & Marketing Expenses / New Customers Acquired
+```
+
+**Purpose**: Evaluate marketing efficiency
+
+**Target**: Reduce CAC, increase CLV/CAC ratio
+
+**Frequency**: Monthly
+
+**Data Source**: Marketing data, dim_customer
+
+---
+
+### Customer Retention Rate
+**Definition**: Percentage of customers who repeat purchase
+
+**Formula**:
+```
+Retention Rate = (Customers with repeat purchase / Total customers at start of period) × 100
+```
+
+**Purpose**: Measure customer loyalty
+
+**Target**: > 80% annual retention
+
+**Frequency**: Quarterly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+### Customer Churn Rate
+**Definition**: Percentage of customers lost in a period
+
+**Formula**:
+```
+Churn Rate = (Customers lost / Total customers at start of period) × 100
+Churn Rate = 100% - Retention Rate
+```
+
+**Purpose**: Measure customer attrition
+
+**Target**: < 20% annual churn
+
+**Frequency**: Quarterly
+
+**Data Source**: fact_sales, dim_customer
+
+---
+
+## Product KPIs
+
+### Number of Products
+**Definition**: Count of unique products in catalog
+
+**Formula**:
+```
+Number of Products = COUNT(DISTINCT product_id)
+```
+
+**Purpose**: Measure product portfolio size
+
+**Frequency**: Monthly
+
+**Data Source**: dim_product
+
+---
+
+### Units Sold by Product
+**Definition**: Quantity of specific product sold
+
+**Formula**:
+```
+Units Sold = SUM(Quantity) WHERE product_id = [product]
+```
+
+**Purpose**: Measure product demand
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales
+
+---
+
+### Product Sales Ranking
+**Definition**: Ranking of products by total sales
+
+**Formula**:
+```
+Rank = ROW_NUMBER() OVER (ORDER BY Total Sales DESC)
+```
+
+**Purpose**: Identify top and bottom performers
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales
+
+**Top 20 Products**: 80% of revenue typically comes from 20% of products (Pareto principle)
+
+---
+
+### Product Profitability Ranking
+**Definition**: Ranking of products by profit amount
+
+**Formula**:
+```
+Rank = ROW_NUMBER() OVER (ORDER BY Total Profit DESC)
+```
+
+**Purpose**: Identify most and least profitable products
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales
+
+---
+
+### Product Profit Margin
+**Definition**: Profit margin of specific product
+
+**Formula**:
+```
+Product Margin % = (Product Profit / Product Sales) × 100
+```
+
+**Purpose**: Measure product margin efficiency
+
+**Target**: All products > 10% margin
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_product
+
+---
+
+### Category Performance
+**Definition**: Aggregated metrics by product category
+
+**Formula**:
+```
+Category Sales = SUM(Sales Amount) WHERE category = [category]
+Category Profit Margin = Category Profit / Category Sales × 100
+```
+
+**Purpose**: Evaluate category strategy
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_product
+
+---
+
+## Geographic KPIs
+
+### Total Sales by Country
+**Definition**: Sum of sales by geographic country
+
+**Formula**:
+```
+Country Sales = SUM(Sales Amount) WHERE country_id = [country]
+```
+
+**Purpose**: Measure market performance
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_country
+
+---
+
+### Market Share by Country
+**Definition**: Percentage of total sales from each country
+
+**Formula**:
+```
+Market Share % = (Country Sales / Total Sales) × 100
+```
+
+**Purpose**: Measure geographic market concentration
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_country
+
+---
+
+### Regional Sales Growth
+**Definition**: Period-over-period growth by region
+
+**Formula**:
+```
+Regional Growth % = ((Current Period Sales - Prior Period Sales) / Prior Period Sales) × 100
+```
+
+**Purpose**: Track regional growth performance
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_country, dim_date
+
+---
+
+### Regional Profit Margin
+**Definition**: Profit margin by geographic region
+
+**Formula**:
+```
+Regional Margin % = (Regional Profit / Regional Sales) × 100
+```
+
+**Purpose**: Identify profitable markets
+
+**Target**: All regions > 15% margin
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_country
+
+---
+
+### Market Penetration
+**Definition**: Percentage of target market captured
+
+**Formula**:
+```
+Penetration % = (Active Customers in Market / Total Population) × 100
+```
+
+**Purpose**: Measure market opportunity
+
+**Frequency**: Quarterly
+
+**Data Source**: Market data, dim_customer
+
+---
+
+### Market Potential
+**Definition**: Revenue potential in a market
+
+**Formula**:
+```
+Market Potential = Average Customer Value × Untapped Customer Base
+```
+
+**Purpose**: Identify growth opportunities
+
+**Frequency**: Quarterly
+
+**Data Source**: Customer data, market research
+
+---
+
+## Temporal KPIs
+
+### Monthly Sales Trend
+**Definition**: Sales by month over time
+
+**Formula**:
+```
+Monthly Sales = SUM(Sales Amount) GROUP BY Month
+```
+
+**Purpose**: Track sales momentum and seasonality
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+### Month-over-Month Growth
+**Definition**: Percentage change from previous month
+
+**Formula**:
+```
+MoM Growth % = ((Current Month - Previous Month) / Previous Month) × 100
+```
+
+**Purpose**: Track short-term trends
+
+**Target**: Positive MoM growth
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+### Year-over-Year Comparison
+**Definition**: Comparison of same period in different years
+
+**Formula**:
+```
+YoY Growth % = ((Current Year - Prior Year) / Prior Year) × 100
+```
+
+**Purpose**: Account for seasonality and long-term trends
+
+**Target**: Positive YoY growth
+
+**Frequency**: Monthly/Quarterly
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+### Year-to-Date (YTD) Sales
+**Definition**: Cumulative sales from start of year to current date
+
+**Formula**:
+```
+YTD Sales = SUM(Sales Amount) WHERE date >= start_of_year AND date <= today
+```
+
+**Purpose**: Track annual performance progress
+
+**Frequency**: Daily
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+### Seasonality Index
+**Definition**: Ratio of monthly average to annual average
+
+**Formula**:
+```
+Seasonality Index = (Monthly Average / Annual Average) × 100
+```
+
+**Purpose**: Identify seasonal patterns
+
+**Interpretation**:
+- Index > 100: Above average sales
+- Index < 100: Below average sales
+- Index = 100: Average sales
+
+**Frequency**: Monthly
+
+**Data Source**: fact_sales, dim_date
+
+---
+
+## Data Quality KPIs
+
+### Data Completeness %
+**Definition**: Percentage of non-null values
+
+**Formula**:
+```
+Completeness = (Non-null Records / Total Records) × 100
+```
+
+**Target**: > 95% completeness
+
+---
+
+### Data Accuracy Score
+**Definition**: Percentage of records matching source system
+
+**Formula**:
+```
+Accuracy = (Matching Records / Total Records) × 100
+```
+
+**Target**: > 99% accuracy
+
+---
+
+### Data Timeliness
+**Definition**: Age of data (time since last refresh)
+
+**Target**: Data < 24 hours old
+
+---
+
+## KPI Review and Governance
+
+### Review Frequency
+- **Weekly**: Operational KPIs (sales, transactions)
+- **Monthly**: Comprehensive KPI review
+- **Quarterly**: Strategic KPI assessment
+- **Annually**: KPI target adjustment
+
+### Target Setting
+- Align with company strategy
+- Consider historical performance
+- Account for market conditions
+- Benchmark against industry
+- Involve stakeholder input
+
+### Reporting
+- Executive dashboard (daily)
+- Detailed reports (weekly/monthly)
+- Ad-hoc analysis (on-demand)
+- Communication to stakeholders
+
+---
+
+**Document Version**: 1.0
+**Last Updated**: 2024
+**Next Review**: Q2 2024
