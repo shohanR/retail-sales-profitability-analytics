@@ -191,3 +191,18 @@ Thumbs.db
 # Compiled Python files in scripts
 05_python/01_scripts/__pycache__/
 05_python/02_notebooks/.ipynb_checkpoints/
+
+
+# ---------------------------------------------------------------------
+# Raw source data
+# ---------------------------------------------------------------------
+
+01_data/01_raw/*
+!01_data/01_raw/README.md
+
+# ---------------------------------------------------------------------
+# Generated processed data
+# ---------------------------------------------------------------------
+
+01_data/02_processed/*
+!01_data/02_processed/README.md
